@@ -2,7 +2,6 @@ import React, { Component } from "react";
 import Field from "./Field";
 import EditQuestion from "./EditQuestion";
 import Button from "./Button";
-import { Input } from "antd";
 import { v4 as uuid } from "uuid";
 import { ReactComponent as Add } from "./../assets/ic_add.svg";
 import { ReactComponent as Edit } from "./../assets/ic_edit.svg";
@@ -12,44 +11,33 @@ class PersonalInformation extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      firstName: {
-        internalUse: false,
-        show: true,
-      },
-      lastName: {
-        internalUse: false,
-        show: true,
-      },
-      emailId: {
-        internalUse: false,
-        show: true,
-      },
-      nationality: {
-        internalUse: false,
-        show: true,
-      },
-      phoneNumber: {
-        internalUse: false,
-        show: true,
-      },
-      currentResidence: {
-        internalUse: false,
-        show: true,
-      },
-      idNumber: {
-        internalUse: false,
-        show: true,
-      },
-      dateOfBirth: {
-        internalUse: false,
-        show: true,
-      },
-      gender: {
-        internalUse: false,
-        show: true,
-      },
-      additionalQuestions: [],
+      firstName: props.info.firstName,
+      lastName: props.info.lastName,
+      emailId: props.info.emailId,
+      nationality: props.info.nationality,
+      phoneNumber: props.info.nationality,
+      currentResidence: props.info.currentResidence,
+      idNumber: props.info.idNumber,
+      dateOfBirth: props.info.dateOfBirth,
+      gender: props.info.gender,
+      personalQuestions: props.info.personalQuestions || [],
     };
+  }
+  componentDidUpdate(prevProps) {
+    if (JSON.stringify(prevProps) !== JSON.stringify(this.props)) {
+      this.setState({
+        firstName: this.props.info.firstName,
+        lastName: this.props.info.lastName,
+        emailId: this.props.info.emailId,
+        nationality: this.props.info.nationality,
+        phoneNumber: this.props.info.nationality,
+        currentResidence: this.props.info.currentResidence,
+        idNumber: this.props.info.idNumber,
+        dateOfBirth: this.props.info.dateOfBirth,
+        gender: this.props.info.gender,
+        personalQuestions: this.props.info.personalQuestions,
+      });
+    }
   }
 
   handleAddQuestion = () => {
@@ -67,22 +55,19 @@ class PersonalInformation extends Component {
       timeUnit: null,
     };
     this.setState((prevState) => ({
-      additionalQuestions: [...prevState.additionalQuestions, question],
+      personalQuestions: [...prevState.personalQuestions, question],
     }));
   };
-  componentDidMount() {
-    this.props.handleChange(this.state);
-  }
   handleRemoveQuestion = (id) => {
     this.setState((prevState) => ({
-      additionalQuestions: prevState.additionalQuestions.filter(
+      personalQuestions: prevState.personalQuestions.filter(
         (question) => question.id != id
       ),
     }));
   };
 
   handleEditQuestion = (id) => {
-    let dummyQuestions = this.state.additionalQuestions;
+    let dummyQuestions = this.state.personalQuestions;
     dummyQuestions.forEach((question, index) => {
       if (question.id === id) {
         dummyQuestions[index] = {
@@ -92,12 +77,12 @@ class PersonalInformation extends Component {
       }
     });
     this.setState({
-      additionalQuestions: dummyQuestions,
+      personalQuestions: dummyQuestions,
     });
   };
 
   handleSaveQuestion = (currQuestion, id) => {
-    let dummyQuestions = this.state.additionalQuestions;
+    let dummyQuestions = this.state.personalQuestions;
     dummyQuestions.forEach((question, index) => {
       if (question.id === id) {
         dummyQuestions[index] = {
@@ -108,7 +93,7 @@ class PersonalInformation extends Component {
       }
     });
     this.setState({
-      additionalQuestions: dummyQuestions,
+      personalQuestions: dummyQuestions,
     });
   };
 
@@ -123,7 +108,7 @@ class PersonalInformation extends Component {
       dateOfBirth,
       currentResidence,
       idNumber,
-      additionalQuestions,
+      personalQuestions,
     } = this.state;
     return (
       <section className="card-section">
@@ -270,7 +255,7 @@ class PersonalInformation extends Component {
               }));
             }}
           />
-          {additionalQuestions.map((question, i) =>
+          {personalQuestions.map((question, i) =>
             question.openEdit ? (
               <EditQuestion
                 question={question}
@@ -297,7 +282,10 @@ class PersonalInformation extends Component {
           >
             <Add /> &nbsp; &nbsp; Add a question
           </div>
-          <Button text="Save Data" onClick={() => this.props.handleChange(this.state)} />
+          <Button
+            text="Save Data"
+            onClick={() => this.props.handleChange(this.state)}
+          />
         </form>
       </section>
     );

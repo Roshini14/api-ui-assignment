@@ -5,7 +5,7 @@ function Field(props) {
       <div className="card-form-flex-child">
         <Checkbox
           name="phone"
-          checked={entity.internal ? entity.internal : entity.mandatory}
+          checked={entity.internalUse ? entity.internalUse : entity.mandatory}
           onChange={handleInternalChange}
         >
           &nbsp;{internalKey}
@@ -27,7 +27,6 @@ function Field(props) {
   }
   const {
     entity,
-    handleEntityChange,
     handleHideChange,
     handleInternalChange,
     placeholder,

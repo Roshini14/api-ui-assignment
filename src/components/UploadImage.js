@@ -5,7 +5,16 @@ import { ReactComponent as Upload } from "./../assets/ic_upload.svg";
 import { ReactComponent as Remove } from "./../assets/ic_remove.svg";
 
 function UploadImage(props) {
-  const [paths, setPaths] = useState([]);
+  async function createFile(){
+    let response = await fetch(props.coverImage);
+    let data = await response.blob();
+    let metadata = {
+      type: 'image/jpeg'
+    };
+    let file = new File([data], "test.jpg", metadata);
+    // ... do something with the file or return it
+  }
+  const [paths, setPaths] = useState([props.coverImage]);
   const onDrop = useCallback(
     (acceptedFiles) => {
       setPaths(

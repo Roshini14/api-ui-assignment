@@ -10,26 +10,21 @@ class Profile extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      education: {
-        value: "",
-        mandatory: false,
-        show: true,
-      },
-      experience: {
-        value: "",
-        mandatory: false,
-        show: true,
-      },
-      resume: {
-        value: "",
-        mandatory: false,
-        show: true,
-      },
-      additionalQuestions: [],
+      education: props.info.education,
+      experience: props.info.experience,
+      resume: props.info.resume,
+      profileQuestions: props.info.profileQuestions || [],
     };
   }
-  componentDidMount() {
-    this.props.handleChange(this.state);
+  componentDidUpdate(prevProps) {
+    if (JSON.stringify(prevProps) !== JSON.stringify(this.props)) {
+      this.setState({
+        education: this.props.info.education,
+        experience: this.props.info.experience,
+        resume: this.props.info.resume,
+        profileQuestions: this.props.info.profileQuestions || [],
+      });
+    }
   }
   handleAddQuestion = () => {
     const question = {
@@ -46,31 +41,20 @@ class Profile extends Component {
       timeUnit: null,
     };
     this.setState((prevState) => ({
-      additionalQuestions: [...prevState.additionalQuestions, question],
+      profileQuestions: [...prevState.profileQuestions, question],
     }));
-  };
-
-  randomAlphaNumeric = () => {
-    return Math.random().toString(36).charAt(2);
-  };
-
-  createFromPattern = (pattern) => {
-    pattern = pattern.split("");
-    return pattern
-      .map((x) => x.replace("x", this.randomAlphaNumeric()))
-      .join("");
   };
 
   handleRemoveQuestion = (id) => {
     this.setState((prevState) => ({
-      additionalQuestions: prevState.additionalQuestions.filter(
+      profileQuestions: prevState.profileQuestions.filter(
         (question) => question.id != id
       ),
     }));
   };
 
   handleEditQuestion = (id) => {
-    let dummyQuestions = this.state.additionalQuestions;
+    let dummyQuestions = this.state.profileQuestions;
     dummyQuestions.forEach((question, index) => {
       if (question.id === id) {
         dummyQuestions[index] = {
@@ -80,12 +64,12 @@ class Profile extends Component {
       }
     });
     this.setState({
-      additionalQuestions: dummyQuestions,
+      profileQuestions: dummyQuestions,
     });
   };
 
   handleSaveQuestion = (currQuestion, id) => {
-    let dummyQuestions = this.state.additionalQuestions;
+    let dummyQuestions = this.state.profileQuestions;
     dummyQuestions.forEach((question, index) => {
       if (question.id === id) {
         dummyQuestions[index] = {
@@ -95,16 +79,15 @@ class Profile extends Component {
         };
       }
     });
-    // debugger
     this.setState(
       {
-        additionalQuestions: dummyQuestions,
+        profileQuestions: dummyQuestions,
       },
       () => this.props.handleChange(this.state)
     );
   };
   render() {
-    const { education, experience, resume, additionalQuestions } = this.state;
+    const { education, experience, resume, profileQuestions } = this.state;
     return (
       <section className="card-section">
         <div className="card-header">{this.props.header}</div>
@@ -178,7 +161,7 @@ class Profile extends Component {
               }));
             }}
           />
-          {additionalQuestions.map((question, i) =>
+          {profileQuestions.map((question, i) =>
             question.openEdit ? (
               <EditQuestion
                 question={question}

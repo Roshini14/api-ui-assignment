@@ -30,8 +30,12 @@ class AdditionalQuestions extends Component {
       additionalQuestions: [...prevState.additionalQuestions, question],
     }));
   };
-  componentDidMount() {
-    this.props.handleChange(this.state.additionalQuestions);
+  componentDidUpdate(prevProps) {
+    if (JSON.stringify(prevProps) !== JSON.stringify(this.props)) {
+      this.setState({
+        additionalQuestions: this.props.info,
+      });
+    }
   }
   handleRemoveQuestion = (id) => {
     this.setState((prevState) => ({

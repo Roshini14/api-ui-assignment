@@ -13,11 +13,90 @@ class Body extends Component {
       type: "applicationForm",
       attributes: {
         coverImage: {},
-        personalInformation: {},
-        profile: {},
+        personalInformation: {
+          firstName: {
+            internalUse: false,
+            show: true,
+          },
+          lastName: {
+            internalUse: false,
+            show: true,
+          },
+          emailId: {
+            internalUse: false,
+            show: true,
+          },
+          nationality: {
+            internalUse: false,
+            show: true,
+          },
+          phoneNumber: {
+            internalUse: false,
+            show: true,
+          },
+          currentResidence: {
+            internalUse: false,
+            show: true,
+          },
+          idNumber: {
+            internalUse: false,
+            show: true,
+          },
+          dateOfBirth: {
+            internalUse: false,
+            show: true,
+          },
+          gender: {
+            internalUse: false,
+            show: true,
+          },
+          additionalQuestions: [],
+        },
+        profile: {
+          education: {
+            mandatory: false,
+            show: true,
+          },
+          experience: {
+            mandatory: false,
+            show: true,
+          },
+          resume: {
+            mandatory: false,
+            show: true,
+          },
+          additionalQuestions: [],
+        },
         customisedQuestions: [],
       },
     };
+  }
+  componentDidMount() {
+    fetch(
+      "http://127.0.0.1:4010/api/911.5737689691844/programs/expedita/application-form",
+      {
+        method: "GET",
+        // body: JSON.stringify({ data: this.state }),
+        headers: {
+          "Content-type": "application/json; charset=UTF-8",
+        },
+      }
+    )
+      .then((response) => {
+        return response.json();
+      })
+      .then((json) => {
+        this.setState({
+          id: json.data.id,
+
+          attributes: {
+            coverImage: json.data.attributes.coverImage,
+            personalInformation: json.data.attributes.personalInformation,
+            profile: json.data.attributes.profile,
+            customisedQuestions: json.data.attributes.customisedQuestions,
+          },
+        });
+      });
   }
   handleCoverImage = (data) => {
     this.setState((prevState) => ({
@@ -52,9 +131,8 @@ class Body extends Component {
     }));
   };
   api = () => {
-    console.log(this.state);
     fetch(
-      " http://127.0.0.1:4010/api/802.1997072307399/programs/ducimus/application-form",
+      "http://127.0.0.1:4010/api/760.4486860403732/programs/velit/application-form",
       {
         method: "PUT",
         body: JSON.stringify({ data: this.state }),
@@ -62,28 +140,37 @@ class Body extends Component {
           "Content-type": "application/json; charset=UTF-8",
         },
       }
-    )
+    );
   };
   render() {
+    const { attributes } = this.state;
+    const { coverImage, personalInformation, profile, customisedQuestions } =
+      attributes;
     return (
       <section>
         <UploadImage
           header="Upload Cover Image"
           handleChange={this.handleCoverImage}
+          coverImage={coverImage}
         />
         <PersonalInformation
           header="Personal Information"
           handleChange={this.handlePersonalInformation}
+          info={personalInformation}
         />
-        <Profile header="Profile" handleChange={this.handleProfile} />
+        <Profile
+          header="Profile"
+          handleChange={this.handleProfile}
+          info={profile}
+        />
         <AdditionalQuestions
           header="Additional Questions"
           handleChange={this.handleCustomisedQuestions}
+          info={customisedQuestions}
         />
         <Button
           text="Submit"
           onClick={() => {
-            console.log("api");
             this.api();
           }}
         />
