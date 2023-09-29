@@ -48,7 +48,7 @@ class Profile extends Component {
   handleRemoveQuestion = (id) => {
     this.setState((prevState) => ({
       profileQuestions: prevState.profileQuestions.filter(
-        (question) => question.id != id
+        (question) => question.id !== id
       ),
     }));
   };

@@ -61,7 +61,7 @@ class PersonalInformation extends Component {
   handleRemoveQuestion = (id) => {
     this.setState((prevState) => ({
       personalQuestions: prevState.personalQuestions.filter(
-        (question) => question.id != id
+        (question) => question.id !== id
       ),
     }));
   };
@@ -99,9 +99,6 @@ class PersonalInformation extends Component {
 
   render() {
     const {
-      firstName,
-      lastName,
-      emailId,
       nationality,
       phoneNumber,
       gender,

@@ -162,10 +162,6 @@ export class Dropdown extends Component {
 }
 
 export class VideoBased extends Component {
-  constructor(props) {
-    super(props);
-  }
-
   render() {
     const {
       maxDur,

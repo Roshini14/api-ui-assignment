@@ -5,15 +5,6 @@ import { ReactComponent as Upload } from "./../assets/ic_upload.svg";
 import { ReactComponent as Remove } from "./../assets/ic_remove.svg";
 
 function UploadImage(props) {
-  async function createFile(){
-    let response = await fetch(props.coverImage);
-    let data = await response.blob();
-    let metadata = {
-      type: 'image/jpeg'
-    };
-    let file = new File([data], "test.jpg", metadata);
-    // ... do something with the file or return it
-  }
   const [paths, setPaths] = useState([props.coverImage]);
   const onDrop = useCallback(
     (acceptedFiles) => {
@@ -27,15 +18,14 @@ function UploadImage(props) {
     },
     [setPaths]
   );
-  const { acceptedFiles, fileRejections, getRootProps, getInputProps } =
-    useDropzone({
-      accept: {
-        "image/jpeg": [],
-        "image/png": [],
-      },
-      maxFiles: 1,
-      onDrop,
-    });
+  const { getRootProps, getInputProps } = useDropzone({
+    accept: {
+      "image/jpeg": [],
+      "image/png": [],
+    },
+    maxFiles: 1,
+    onDrop,
+  });
   return (
     <section className="card-container">
       {_.isEmpty(paths) ? (
@@ -51,7 +41,7 @@ function UploadImage(props) {
       ) : (
         <section className="card-image-section">
           {paths.map((path) => (
-            <img key={path} src={path} className="card-image" />
+            <img key={path} src={path} alt="Cover" className="card-image" />
           ))}
           <div
             className="card-footer"

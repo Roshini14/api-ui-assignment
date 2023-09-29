@@ -40,7 +40,7 @@ class AdditionalQuestions extends Component {
   handleRemoveQuestion = (id) => {
     this.setState((prevState) => ({
       additionalQuestions: prevState.additionalQuestions.filter(
-        (question) => question.id != id
+        (question) => question.id !== id
       ),
     }));
   };
